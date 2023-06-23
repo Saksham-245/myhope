@@ -11,6 +11,14 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  // final _nationality = TextEditingController();
+  // final _language = TextEditingController();
+  // final _residence = TextEditingController();
+  // final _bio = TextEditingController();
+  // final _firstName = TextEditingController();
+  // final _email = TextEditingController();
+  // final _password = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

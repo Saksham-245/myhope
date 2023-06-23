@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myhope/utils/utils.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -11,6 +12,13 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  final _mailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  String message = '';
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -42,60 +50,79 @@ class _LogInState extends State<LogIn> {
                     opacity: 0.50,
                     child: Container(
                       width: 260.w,
-                      height: 230.h,
+                      height: 240.h,
                       decoration: ShapeDecoration(
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 200.w,
-                            color: Colors.white,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'mail',
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16.h,
-                                  vertical: 19,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 200.w,
+                              color: Colors.white,
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null ||
+                                      value.isEmpty ||
+                                      !value.contains('@')) {
+                                    return 'Please enter email';
+                                  }
+                                  return null;
+                                },
+                                controller: _mailController,
+                                decoration: InputDecoration(
+                                  hintText: 'mail',
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 16.h,
+                                    vertical: 19,
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
                                 ),
-                                filled: true,
-                                fillColor: Colors.white,
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                          SizedBox(height: 20.h),
-                          Container(
-                            width: 200.w,
-                            color: Colors.white,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'password',
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16.h,
-                                  vertical: 19,
+                            SizedBox(height: 20.h),
+                            Container(
+                              width: 200.w,
+                              color: Colors.white,
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter password';
+                                  }
+                                  return null;
+                                },
+                                controller: _passwordController,
+                                decoration: InputDecoration(
+                                  hintText: 'password',
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 16.h,
+                                    vertical: 19,
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
                                 ),
-                                filled: true,
-                                fillColor: Colors.white,
+                                textAlign: TextAlign.center,
                               ),
+                            ),
+                            SizedBox(height: 25.h),
+                            Text(
+                              'If you forgot password...',
                               textAlign: TextAlign.center,
-                            ),
-                          ),
-                          SizedBox(height: 25.h),
-                          Text(
-                            'If you forgot password...',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: const Color(0xFF8B8B8B),
-                              fontSize: 12.sp,
-                              fontFamily: GoogleFonts.quicksand().fontFamily,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
-                        ],
+                              style: TextStyle(
+                                color: const Color(0xFF8B8B8B),
+                                fontSize: 12.sp,
+                                fontFamily: GoogleFonts.quicksand().fontFamily,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -114,7 +141,23 @@ class _LogInState extends State<LogIn> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          login(
+                            _mailController.text,
+                            _passwordController.text,
+                          ).then(
+                            (value) => {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  duration: const Duration(seconds: 5),
+                                  content: Text(value),
+                                ),
+                              ),
+                            },
+                          );
+                        }
+                      },
                       child: Text(
                         'Login',
                         textAlign: TextAlign.center,
