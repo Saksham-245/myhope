@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myhope/screens/signup_screen.dart';
 import 'package:myhope/utils/utils.dart';
 
 class LogIn extends StatefulWidget {
@@ -35,7 +36,7 @@ class _LogInState extends State<LogIn> {
             child: Center(
               child: Column(
                 children: [
-                  SizedBox(height: 96.h),
+                  SizedBox(height: 80.h),
                   Image.asset(
                     'assets/images/Logo.png',
                   ),
@@ -120,13 +121,35 @@ class _LogInState extends State<LogIn> {
                                 fontFamily: GoogleFonts.quicksand().fontFamily,
                                 fontWeight: FontWeight.w600,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 40.h),
+                  SizedBox(height: 5.h),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpScreen()),
+                      );
+                    },
+                    child: Text(
+                      "Don't have an Account? SignUp",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: const Color(0xFF8B8B8B),
+                        fontSize: 12.sp,
+                        fontFamily: GoogleFonts.quicksand().fontFamily,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   SizedBox(
                     width: 160.w,
                     height: 36.h,
