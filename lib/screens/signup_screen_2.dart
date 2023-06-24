@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myhope/screens/home.dart';
 
 // ignore: must_be_immutable
 class SignUpScreen2 extends StatefulWidget {
@@ -511,6 +512,14 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                     backgroundColor: const Color(0xFFFF9BC4),
                   ),
                   onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Home(
+                          email: _email.text,
+                        ),
+                      ),
+                    );
                     // signUp(
                     //   widget.firstName,
                     //   widget.middleName,

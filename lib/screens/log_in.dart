@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:myhope/screens/signup_screen.dart';
 import 'package:myhope/utils/utils.dart';
 
@@ -12,7 +13,7 @@ class LogIn extends StatefulWidget {
   State<LogIn> createState() => _LogInState();
 }
 
-class _LogInState extends State<LogIn> {
+class _LogInState extends State<LogIn> with TickerProviderStateMixin {
   final _mailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -196,10 +197,11 @@ class _LogInState extends State<LogIn> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  SvgPicture.asset(
-                    'assets/images/fire.svg',
+                  Lottie.asset(
+                    'assets/images/fire.json',
                     width: 94.w,
                     height: 103.h,
+                    repeat: true,
                   ),
                 ],
               ),
