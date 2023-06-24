@@ -30,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       body: Lottie.asset(
         'assets/images/fire.json',
         controller: _controller,
