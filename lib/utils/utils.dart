@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 Future<String> login(String email, String password) async {
   try {
@@ -12,9 +13,13 @@ Future<String> login(String email, String password) async {
   }
 }
 
+void signup(String firstName) {
+  print(firstName);
+}
+
 Future<String> signUp(
   String firstName,
-  String middileName,
+  String middleName,
   String lastName,
   String bio,
   String occupation,
@@ -29,24 +34,27 @@ Future<String> signUp(
 ) async {
   try {
     var response = await http.post(
-        Uri.parse('https://my-hope-backend.onrender.com/user/new'),
-        body: {
-          'name': {
-            "firstName": firstName,
-            "middleName": middileName,
-            "lastName": lastName,
-          },
-          'bio': bio,
-          'occupation': occupation,
-          'email': email,
-          'password': password,
-          'phoneNumber': phoneNumber,
-          'hobbies': [],
-          'profile': profile,
-          'country': country,
-          'gender': gender
-        });
-    return response.body;
+      Uri.parse('https://my-hope-backend.onrender.com/user/new'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'name': {
+          "firstName": firstName,
+          "middleName": middleName,
+          "lastName": lastName,
+        },
+        'bio': bio,
+        'occupation': occupation,
+        'email': email,
+        'password': password,
+        'phoneNumber': phoneNumber,
+        'hobbies': [],
+        'profile': profile,
+        'country': country,
+        'gender': gender,
+      }),
+    );
+    final decodedData = json.decode(response.body);
+    return decodedData;
   } catch (e) {
     return 'Failed to Login';
   }

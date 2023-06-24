@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myhope/screens/home.dart';
+
+import 'package:myhope/utils/utils.dart';
 
 // ignore: must_be_immutable
 class SignUpScreen2 extends StatefulWidget {
@@ -30,7 +31,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
   final _hobbies = TextEditingController();
   final _country = TextEditingController();
   final _gender = TextEditingController();
-  // final _photo = TextEditingController();
+  final _photo = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -512,29 +513,30 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                     backgroundColor: const Color(0xFFFF9BC4),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Home(
-                          email: _email.text,
-                        ),
-                      ),
-                    );
-                    // signUp(
-                    //   widget.firstName,
-                    //   widget.middleName,
-                    //   widget.lastName,
-                    //   _bio.text,
-                    //   _occupation.text,
-                    //   _email.text,
-                    //   _password.text,
-                    //   _dob.text,
-                    //   _phoneNumber.text,
-                    //   _hobbies.text,
-                    //   _photo.text,
-                    //   _country.text,
-                    //   _gender.text,
+                    // Navigator.pushReplacement(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => Home(
+                    //       email: _email.text,
+                    //     ),
+                    //   ),
                     // );
+
+                    signUp(
+                      widget.firstName,
+                      widget.middleName,
+                      widget.lastName,
+                      _bio.text,
+                      _occupation.text,
+                      _email.text,
+                      _password.text,
+                      _dob.text,
+                      _phoneNumber.text,
+                      _hobbies.text,
+                      _photo.text,
+                      _country.text,
+                      _gender.text,
+                    );
                   },
                   child: Text(
                     'GO!',
