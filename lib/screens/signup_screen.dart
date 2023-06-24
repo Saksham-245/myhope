@@ -25,7 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 40.h,
+                height: 65.h,
               ),
               Center(
                 child: Text(
@@ -270,7 +270,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     backgroundColor: const Color(0xFF96A5F2),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => SignUpScreen2(

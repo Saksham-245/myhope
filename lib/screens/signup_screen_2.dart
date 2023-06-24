@@ -4,6 +4,20 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:myhope/utils/utils.dart';
 
+List<String> _countryList = [
+  'India',
+  'Japan',
+];
+
+List<String> _genderList = ['Male', 'Female'];
+
+List<String> _occupationList = [
+  'Software Developer',
+  'Accountant',
+  'Quality Assurance',
+  'Tester',
+];
+
 // ignore: must_be_immutable
 class SignUpScreen2 extends StatefulWidget {
   String firstName;
@@ -23,15 +37,16 @@ class SignUpScreen2 extends StatefulWidget {
 
 class _SignUpScreen2State extends State<SignUpScreen2> {
   final _bio = TextEditingController();
-  final _occupation = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
   final _dob = TextEditingController();
   final _phoneNumber = TextEditingController();
   final _hobbies = TextEditingController();
-  final _country = TextEditingController();
-  final _gender = TextEditingController();
+  late String _selectedCountry;
+  late String _selectedGender;
+  late String _selectOccupation;
   final _photo = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +57,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 55.h,
+                height: 65.h,
               ),
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
@@ -121,14 +136,25 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           borderRadius: BorderRadius.circular(25),
                         ),
                       ),
-                      child: TextFormField(
-                        controller: _occupation,
+                      child: DropdownButtonFormField(
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectOccupation = newValue!;
+                          });
+                        },
                         decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(15.0),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
                         ),
+                        items: _occupationList.map((String occupation) {
+                          return DropdownMenuItem<String>(
+                            value: occupation,
+                            child: Text(occupation),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
@@ -171,6 +197,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                   ),
                   child: TextFormField(
                     controller: _email,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(15.0),
                       border: OutlineInputBorder(
@@ -217,6 +244,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                   ),
                   child: TextFormField(
                     controller: _password,
+                    obscureText: true,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(15.0),
                       border: OutlineInputBorder(
@@ -309,6 +337,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                       ),
                       child: TextFormField(
                         controller: _phoneNumber,
+                        keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(15.0),
                           border: OutlineInputBorder(
@@ -439,14 +468,25 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           borderRadius: BorderRadius.circular(25),
                         ),
                       ),
-                      child: TextFormField(
-                        controller: _country,
+                      child: DropdownButtonFormField(
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedCountry = newValue!;
+                          });
+                        },
                         decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(15.0),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
                         ),
+                        items: _countryList.map((String country) {
+                          return DropdownMenuItem<String>(
+                            value: country,
+                            child: Text(country),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
@@ -486,14 +526,27 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           borderRadius: BorderRadius.circular(25),
                         ),
                       ),
-                      child: TextFormField(
-                        controller: _gender,
+                      child: DropdownButtonFormField(
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedGender = newValue!;
+                          });
+                        },
                         decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(15.0),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 10,
+                          ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
                         ),
+                        items: _genderList.map((String gender) {
+                          return DropdownMenuItem<String>(
+                            value: gender,
+                            child: Text(gender),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
@@ -502,52 +555,83 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
               SizedBox(
                 height: 20.h,
               ),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                          width: 0.50, color: Color(0xFF96A5F2)),
-                      borderRadius: BorderRadius.circular(18),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                            width: 0.50, color: Color(0xFF96A5F2)),
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      backgroundColor: const Color(0xFF96A5F2),
                     ),
-                    backgroundColor: const Color(0xFFFF9BC4),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Previous',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontFamily: GoogleFonts.zenMaruGothic().fontFamily,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
-                  onPressed: () {
-                    // Navigator.pushReplacement(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => Home(
-                    //       email: _email.text,
-                    //     ),
-                    //   ),
-                    // );
+                  SizedBox(
+                    width: 50.w,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                            width: 0.50, color: Color(0xFF96A5F2)),
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      backgroundColor: const Color(0xFFFF9BC4),
+                    ),
+                    onPressed: () {
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => Home(
+                      //       email: _email.text,
+                      //     ),
+                      //   ),
+                      // );
 
-                    signUp(
-                      widget.firstName,
-                      widget.middleName,
-                      widget.lastName,
-                      _bio.text,
-                      _occupation.text,
-                      _email.text,
-                      _password.text,
-                      _dob.text,
-                      _phoneNumber.text,
-                      _hobbies.text,
-                      _photo.text,
-                      _country.text,
-                      _gender.text,
-                    );
-                  },
-                  child: Text(
-                    'GO!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                      fontFamily: GoogleFonts.zenMaruGothic().fontFamily,
-                      fontWeight: FontWeight.w700,
+                      signUp(
+                        widget.firstName,
+                        widget.middleName,
+                        widget.lastName,
+                        _bio.text,
+                        _selectOccupation,
+                        _email.text,
+                        _password.text,
+                        _dob.text,
+                        _phoneNumber.text,
+                        _hobbies.text,
+                        _photo.text,
+                        _selectedCountry,
+                        _selectedGender,
+                      );
+                    },
+                    child: Text(
+                      'GO!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontFamily: GoogleFonts.zenMaruGothic().fontFamily,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
-                ),
+                ],
+              ),
+              SizedBox(
+                height: 25.h,
               )
             ],
           ),

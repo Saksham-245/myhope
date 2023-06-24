@@ -36,7 +36,7 @@ class _LogInState extends State<LogIn> with TickerProviderStateMixin {
             child: Center(
               child: Column(
                 children: [
-                  SizedBox(height: 80.h),
+                  SizedBox(height: 65.h),
                   Image.asset(
                     'assets/images/Logo.png',
                   ),
@@ -66,6 +66,7 @@ class _LogInState extends State<LogIn> with TickerProviderStateMixin {
                               width: 200.w,
                               color: Colors.white,
                               child: TextFormField(
+                                keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value == null ||
                                       value.isEmpty ||
@@ -92,6 +93,7 @@ class _LogInState extends State<LogIn> with TickerProviderStateMixin {
                               width: 200.w,
                               color: Colors.white,
                               child: TextFormField(
+                                obscureText: true,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter password';
@@ -169,7 +171,8 @@ class _LogInState extends State<LogIn> with TickerProviderStateMixin {
                           login(
                             _mailController.text,
                             _passwordController.text,
-                          ).then(
+                          )
+                              .then(
                             (value) => {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -178,7 +181,16 @@ class _LogInState extends State<LogIn> with TickerProviderStateMixin {
                                 ),
                               ),
                             },
-                          );
+                          )
+                              // ignore: body_might_complete_normally_catch_error
+                              .catchError((error) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                duration: Duration(seconds: 5),
+                                content: Text('Something went Wrong!'),
+                              ),
+                            );
+                          });
                         }
                       },
                       child: Text(
