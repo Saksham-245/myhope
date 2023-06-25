@@ -659,7 +659,8 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           Future.delayed(const Duration(seconds: 2), () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => const Home()),
+                              MaterialPageRoute(
+                                  builder: (context) => const Home()),
                             );
                           });
                         } else if (response['statusCode'] == 400) {
@@ -668,8 +669,8 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             builder: (context) {
                               return AlertDialog(
                                 title: const Text('Failed'),
-                                content:
-                                    Text(response['data']['message'] ?? ''),
+                                content: Text((response['data']['message'] ||
+                                    response['message']) as String),
                               );
                             },
                           );

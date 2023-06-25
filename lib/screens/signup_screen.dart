@@ -40,7 +40,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LogIn(),
+                          ),
+                        );
+                      },
                       icon: const Icon(Icons.arrow_back),
                     ),
                     Text(
