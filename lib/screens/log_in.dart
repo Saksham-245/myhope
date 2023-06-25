@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:myhope/screens/home.dart';
 import 'package:myhope/screens/signup_screen.dart';
 import 'package:myhope/utils/utils.dart';
 
@@ -18,7 +19,15 @@ class _LogInState extends State<LogIn> with TickerProviderStateMixin {
 
   final _formKey = GlobalKey<FormState>();
 
-  String message = '';
+  Future<Map<String, dynamic>>? _loginFuture;
+  String _loginMessage = '';
+
+  @override
+  void dispose() {
+    _mailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,58 +161,99 @@ class _LogInState extends State<LogIn> with TickerProviderStateMixin {
                   SizedBox(
                     height: 10.h,
                   ),
-                  SizedBox(
-                    width: 160.w,
-                    height: 36.h,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF85DEF3),
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                            width: 0.50,
-                            color: Color(0xFF85DEF3),
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          login(
-                            _mailController.text,
-                            _passwordController.text,
-                          )
-                              .then(
-                            (value) => {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  duration: const Duration(seconds: 5),
-                                  content: Text(value),
+                  FutureBuilder<Map<String, dynamic>>(
+                    future: _loginFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        // Show the loader button while waiting for the API call to complete
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        // Show an error message if the API call encountered an error
+                        return Text('Something went wrong!');
+                      } else {
+                        // Show the regular login button
+                        return SizedBox(
+                          width: 160.w,
+                          height: 36.h,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF85DEF3),
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 0.50,
+                                  color: Color(0xFF85DEF3),
                                 ),
+                                borderRadius: BorderRadius.circular(10),
                               ),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                login(
+                                  _mailController.text,
+                                  _passwordController.text,
+                                ).then(
+                                  (response) => {
+                                    if (response['statusCode'] == 200)
+                                      {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return const AlertDialog(
+                                              title: Text('Success'),
+                                              content: Text('Login Success'),
+                                            );
+                                          },
+                                        ),
+                                        Future.delayed(
+                                            const Duration(seconds: 2), () {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Home()),
+                                          );
+                                        })
+                                      }
+                                    else if (response['statusCode'] == 400)
+                                      {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return const AlertDialog(
+                                              title: Text(
+                                                'not Found',
+                                              ),
+                                              content: Text(
+                                                'no user found with this email',
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      }
+                                    else
+                                      {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(response['data']),
+                                        ))
+                                      }
+                                  },
+                                );
+                              }
                             },
-                          )
-                              // ignore: body_might_complete_normally_catch_error
-                              .catchError((error) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                duration: Duration(seconds: 5),
-                                content: Text('Something went Wrong!'),
+                            child: Text(
+                              'Login',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.sp,
+                                fontFamily: GoogleFonts.quicksand().fontFamily,
+                                fontWeight: FontWeight.w700,
                               ),
-                            );
-                          });
-                        }
-                      },
-                      child: Text(
-                        'Login',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontFamily: GoogleFonts.quicksand().fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
                   ),
                   SizedBox(
                     height: 10.h,

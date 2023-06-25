@@ -1,7 +1,10 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<String> login(String email, String password) async {
+Future<Map<String, dynamic>> login(String email, String password) async {
   try {
     var response = await http.post(
       Uri.parse('https://my-hope-backend.onrender.com/user/login'),
@@ -10,9 +13,32 @@ Future<String> login(String email, String password) async {
       },
       body: jsonEncode(<String, String>{"email": email, "password": password}),
     );
-    return response.body;
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      return {"data": data, "statusCode": response.statusCode};
+    } else {
+      // handle non-200 status codes
+      return {
+        "data": 'Server responded with ${response.statusCode} status code.',
+        "statusCode": response.statusCode
+      };
+    }
+  } on SocketException catch (e) {
+    // handle network errors
+    return {
+      "data": 'Network error. Please check your internet connection.',
+      "statusCode": 500
+    };
+  } on TimeoutException catch (e) {
+    // handle timeouts
+    return {
+      "data": 'The request timed out. Please try again later.',
+      "statusCode": 500
+    };
   } catch (e) {
-    return 'Failed to Login';
+    // handle other errors
+    return {"data": 'Something went wrong: $e', "statusCode": 500};
   }
 }
 

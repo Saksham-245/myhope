@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:myhope/screens/home_2.dart';
 import 'package:myhope/screens/log_in.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -42,7 +43,9 @@ class _SplashScreenState extends State<SplashScreen>
               () => Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const LogIn(),
+                  builder: (context) => const Home2(
+                    title: '',
+                  ),
                 ),
               ),
             );
