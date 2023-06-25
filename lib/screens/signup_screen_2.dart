@@ -49,12 +49,15 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
   late String _selectOccupation;
   final _photo = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Form(
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -224,6 +227,12 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                     ),
                   ),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == '' || value!.isEmpty) {
+                        return 'Please enter email';
+                      }
+                      return null;
+                    },
                     controller: _email,
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
@@ -271,6 +280,23 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                     ),
                   ),
                   child: TextFormField(
+                    validator: (value) {
+                      // ignore: unrelated_type_equality_checks
+                      if (value == '' ||
+                          value!.isEmpty ||
+                          value == 'password' ||
+                          value == '12345678') {
+                        if (value is String &&
+                            (value == 'password' ||
+                                value == '12345678' ||
+                                RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+                                    .hasMatch(value))) {
+                          return 'Please enter correct password';
+                        }
+                        return 'Please enter correct password';
+                      }
+                      return null;
+                    },
                     controller: _password,
                     obscureText: true,
                     decoration: const InputDecoration(
@@ -318,6 +344,12 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                       ),
                       child: TextFormField(
                         controller: _dob,
+                        validator: (value) {
+                          if (value == '' || value!.isEmpty) {
+                            return 'Please enter DOB';
+                          }
+                          return null;
+                        },
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(15.0),
                           border: OutlineInputBorder(
@@ -497,6 +529,12 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                         ),
                       ),
                       child: DropdownButtonFormField(
+                        validator: (value) {
+                          if (value == '' || value!.isEmpty) {
+                            return 'Please select a value';
+                          }
+                          return null;
+                        },
                         onChanged: (newValue) {
                           setState(() {
                             _selectedCountry = newValue!;
@@ -555,6 +593,12 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                         ),
                       ),
                       child: DropdownButtonFormField(
+                        validator: (value) {
+                          if (value == '' || value!.isEmpty) {
+                            return 'Please select a value';
+                          }
+                          return null;
+                        },
                         onChanged: (newValue) {
                           setState(() {
                             _selectedGender = newValue!;
@@ -621,74 +665,56 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                       backgroundColor: const Color(0xFFFF9BC4),
                     ),
                     onPressed: () {
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => Home(
-                      //       email: _email.text,
-                      //     ),
-                      //   ),
-                      // );
-
-                      signUp(
-                        widget.firstName,
-                        widget.middleName,
-                        widget.lastName,
-                        _bio.text,
-                        _selectOccupation,
-                        _email.text,
-                        _password.text,
-                        _dob.text,
-                        _phoneNumber.text,
-                        _hobbies.text,
-                        _photo.text,
-                        _selectedCountry,
-                        _selectedGender,
-                      ).then((response) {
-                        if (response['statusCode'] == 201) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Success'),
-                                content: Text(
-                                  response['data']['message'],
-                                ),
-                              );
-                            },
-                          );
-                          Future.delayed(const Duration(seconds: 2), () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Home()),
+                      if (_formKey.currentState!.validate()) {
+                        signUp(
+                          widget.firstName,
+                          widget.middleName,
+                          widget.lastName,
+                          _bio.text,
+                          _selectOccupation,
+                          _email.text,
+                          _password.text,
+                          _dob.text,
+                          _phoneNumber.text,
+                          _hobbies.text,
+                          _photo.text,
+                          _selectedCountry,
+                          _selectedGender,
+                        ).then((response) {
+                          if (response['statusCode'] == 201) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Success'),
+                                  content: Text(
+                                    response['data']['message'],
+                                  ),
+                                );
+                              },
                             );
-                          });
-                        } else if (response['statusCode'] == 400) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Failed'),
-                                content: Text(
-                                  (response['data']['message']),
-                                ),
+                            Future.delayed(const Duration(seconds: 2), () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()),
                               );
-                            },
-                          );
-                        } else if (response['flag']) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const AlertDialog(
-                                title: Text('Failed'),
-                                content: Text(
-                                    'Password is shorter than minimum allowed length (8)'),
-                              );
-                            },
-                          );
-                        }
-                      });
+                            });
+                          } else if (response['statusCode'] == 400) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Failed'),
+                                  content: Text(
+                                    (response['data']['message']),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        });
+                      }
                     },
                     child: Text(
                       'GO!',

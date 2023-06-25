@@ -16,12 +16,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _middleName = TextEditingController();
   final _lastName = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Form(
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -119,6 +122,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter First Name';
+                      }
+                      return null;
+                    },
                     controller: _firstName,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(15.0),
@@ -210,7 +219,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Last Name';
+                      }
+                      return null;
+                    },
                     controller: _lastName,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(15.0),
@@ -304,16 +319,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     backgroundColor: const Color(0xFF96A5F2),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignUpScreen2(
-                          firstName: _firstName.text,
-                          middleName: _middleName.text,
-                          lastName: _lastName.text,
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignUpScreen2(
+                            firstName: _firstName.text,
+                            middleName: _middleName.text,
+                            lastName: _lastName.text,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   },
                   child: Text(
                     'Confirmation',

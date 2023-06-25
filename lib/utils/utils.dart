@@ -84,22 +84,19 @@ Future<Map<String, dynamic>> signUp(
     if (response.statusCode == 200) {
       return {"data": data, "statusCode": response.statusCode};
     } else {
-      // handle non-200 status codes
       return {"data": data, "statusCode": response.statusCode};
     }
   } on SocketException {
-    // handle network errors
     return {
       "data": 'Network error. Please check your internet connection.',
       "statusCode": 500
     };
   } on TimeoutException {
-    // handle timeouts
     return {
       "data": 'The request timed out. Please try again later.',
       "statusCode": 500
     };
   } catch (e) {
-    return {"data": 'Password is shorter', 'flag': true};
+    return {"data": 'Password is shorter', "statusCode": 500};
   }
 }
