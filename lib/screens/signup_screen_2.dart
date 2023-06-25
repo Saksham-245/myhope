@@ -651,8 +651,9 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             builder: (context) {
                               return AlertDialog(
                                 title: const Text('Success'),
-                                content:
-                                    Text(response['data']['message'] ?? ''),
+                                content: Text(
+                                  response['data']['message'],
+                                ),
                               );
                             },
                           );
@@ -669,8 +670,20 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             builder: (context) {
                               return AlertDialog(
                                 title: const Text('Failed'),
-                                content: Text((response['data']['message'] ||
-                                    response['message']) as String),
+                                content: Text(
+                                  (response['data']['message']),
+                                ),
+                              );
+                            },
+                          );
+                        } else if (response['flag']) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const AlertDialog(
+                                title: Text('Failed'),
+                                content: Text(
+                                    'Password is shorter than minimum allowed length (8)'),
                               );
                             },
                           );

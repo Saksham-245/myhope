@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -78,6 +79,7 @@ Future<Map<String, dynamic>> signUp(
         'gender': gender,
       }),
     );
+
     var data = json.decode(response.body);
     if (response.statusCode == 200) {
       return {"data": data, "statusCode": response.statusCode};
@@ -98,7 +100,6 @@ Future<Map<String, dynamic>> signUp(
       "statusCode": 500
     };
   } catch (e) {
-    // handle other errors
-    return {"data": e.toString(), "statusCode": 500};
+    return {"data": 'Password is shorter', 'flag': true};
   }
 }
