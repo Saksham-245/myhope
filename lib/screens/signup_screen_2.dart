@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myhope/screens/home.dart';
+import 'package:myhope/screens/log_in.dart';
 
 import 'package:myhope/utils/utils.dart';
 
@@ -57,7 +59,33 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 65.h,
+                height: 40.h,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LogIn(),
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                    Text(
+                      'Back to Login',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontFamily: GoogleFonts.nunito().fontFamily,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
@@ -616,7 +644,37 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                         _photo.text,
                         _selectedCountry,
                         _selectedGender,
-                      );
+                      ).then((response) {
+                        if (response['statusCode'] == 201) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Success'),
+                                content:
+                                    Text(response['data']['message'] ?? ''),
+                              );
+                            },
+                          );
+                          Future.delayed(const Duration(seconds: 2), () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Home()),
+                            );
+                          });
+                        } else if (response['statusCode'] == 400) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Failed'),
+                                content:
+                                    Text(response['data']['message'] ?? ''),
+                              );
+                            },
+                          );
+                        }
+                      });
                     },
                     child: Text(
                       'GO!',

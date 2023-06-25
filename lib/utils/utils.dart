@@ -24,13 +24,13 @@ Future<Map<String, dynamic>> login(String email, String password) async {
         "statusCode": response.statusCode
       };
     }
-  } on SocketException catch (e) {
+  } on SocketException {
     // handle network errors
     return {
       "data": 'Network error. Please check your internet connection.',
       "statusCode": 500
     };
-  } on TimeoutException catch (e) {
+  } on TimeoutException {
     // handle timeouts
     return {
       "data": 'The request timed out. Please try again later.',
@@ -42,7 +42,7 @@ Future<Map<String, dynamic>> login(String email, String password) async {
   }
 }
 
-Future<String> signUp(
+Future<Map<String, dynamic>> signUp(
   String firstName,
   String middleName,
   String lastName,
@@ -78,9 +78,27 @@ Future<String> signUp(
         'gender': gender,
       }),
     );
-    final decodedData = json.decode(response.body);
-    return decodedData;
+    var data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      return {"data": data, "statusCode": response.statusCode};
+    } else {
+      // handle non-200 status codes
+      return {"data": data, "statusCode": response.statusCode};
+    }
+  } on SocketException {
+    // handle network errors
+    return {
+      "data": 'Network error. Please check your internet connection.',
+      "statusCode": 500
+    };
+  } on TimeoutException {
+    // handle timeouts
+    return {
+      "data": 'The request timed out. Please try again later.',
+      "statusCode": 500
+    };
   } catch (e) {
-    return 'Failed to Login';
+    // handle other errors
+    return {"data": e.toString(), "statusCode": 500};
   }
 }

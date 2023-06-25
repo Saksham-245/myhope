@@ -21,8 +21,8 @@ class _Home2State extends State<Home2> {
         leading: const Image(
           image: AssetImage('assets/images/logo_flame.png'),
         ),
-        title: Row(
-          children: [Text(widget.title)],
+        title: const Row(
+          children: [Text('My Hope')],
         ),
         centerTitle: false,
         actions: [
@@ -92,7 +92,7 @@ class _Home2State extends State<Home2> {
               );
             },
           ),
-          Center(child: MessageBanner()),
+          const Center(child: MessageBanner()),
           const WelcomeFlagText()
         ],
       ),

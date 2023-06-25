@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myhope/screens/log_in.dart';
 import 'package:myhope/screens/signup_screen_2.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -25,7 +26,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 65.h,
+                height: 35.h,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LogIn(),
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                    Text(
+                      'Back to Login',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontFamily: GoogleFonts.nunito().fontFamily,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Center(
                 child: Text(

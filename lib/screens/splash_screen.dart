@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:myhope/screens/home_2.dart';
-import 'package:myhope/screens/log_in.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

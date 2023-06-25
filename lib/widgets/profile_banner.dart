@@ -42,7 +42,7 @@ class _ProfileBannerState extends State<ProfileBanner> {
               ),
             ),
           ),
-          Text('Name'),
+          const Text('Name'),
         ],
       ),
 

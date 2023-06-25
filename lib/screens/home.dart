@@ -4,7 +4,7 @@ import 'package:myhope/widgets/profile_banner.dart';
 import 'package:myhope/widgets/welcome_flag_text.dart';
 
 class Home extends StatefulWidget {
-  Home({
+  const Home({
     super.key,
   });
 
