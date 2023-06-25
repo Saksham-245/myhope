@@ -5,7 +5,10 @@ Future<String> login(String email, String password) async {
   try {
     var response = await http.post(
       Uri.parse('https://my-hope-backend.onrender.com/user/login'),
-      body: json.encode({"email": email, "password": password}),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{"email": email, "password": password}),
     );
     return response.body;
   } catch (e) {
