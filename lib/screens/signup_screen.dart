@@ -12,10 +12,9 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final _firstName = TextEditingController();
-  final _middleName = TextEditingController();
-  final _lastName = TextEditingController();
-
+  String _firstName = '';
+  String _middleName = '';
+  String _lastName = '';
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -31,37 +30,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(
                 height: 35.h,
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LogIn(),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LogIn(),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                    Text(
-                      'Back to Login',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontFamily: GoogleFonts.nunito().fontFamily,
-                        fontWeight: FontWeight.bold,
+              Padding(
+                padding: EdgeInsets.only(right: 220.w),
+                child: InkWell(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LogIn(),
                       ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.arrow_back,
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Text(
+                          'Back to Login',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontFamily: GoogleFonts.nunito().fontFamily,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
               Center(
@@ -109,31 +110,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 5.h,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 15.w),
-                child: Container(
-                  width: 340.w,
-                  height: 50.h,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                          width: 0.50, color: Color(0xFF8B8B8B)),
-                      borderRadius: BorderRadius.circular(25),
+                padding: EdgeInsets.only(
+                  left: 20.w,
+                  right: 20.w,
+                ),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter first name';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      _firstName = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter First Name';
-                      }
-                      return null;
-                    },
-                    controller: _firstName,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(15.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                    contentPadding: EdgeInsets.only(
+                      top: 20.w,
+                      left: 10.w,
+                      right: 10.w,
+                      bottom: 15.w,
+                    ),
+                    errorStyle: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12.sp,
+                      fontFamily: GoogleFonts.quicksand().fontFamily,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -161,25 +168,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 5.h,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 15.w),
-                child: Container(
-                  width: 340.w,
-                  height: 50.h,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                          width: 0.50, color: Color(0xFF8B8B8B)),
-                      borderRadius: BorderRadius.circular(25),
+                padding: EdgeInsets.only(
+                  left: 20.w,
+                  right: 20.w,
+                ),
+                child: TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      _middleName = value.trim();
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                  child: TextFormField(
-                    controller: _middleName,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(15.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                    contentPadding: EdgeInsets.only(
+                      top: 20.w,
+                      left: 10.w,
+                      right: 10.w,
+                      bottom: 15.w,
                     ),
                   ),
                 ),
@@ -207,31 +214,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 5.h,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 15.w),
-                child: Container(
-                  width: 340.w,
-                  height: 50.h,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                          width: 0.50, color: Color(0xFF8B8B8B)),
-                      borderRadius: BorderRadius.circular(25),
+                padding: EdgeInsets.only(
+                  left: 20.w,
+                  right: 20.w,
+                ),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter last name';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      _lastName = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter Last Name';
-                      }
-                      return null;
-                    },
-                    controller: _lastName,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(15.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                    errorStyle: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12.sp,
+                      fontFamily: GoogleFonts.quicksand().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    contentPadding: EdgeInsets.only(
+                      top: 20.w,
+                      left: 10.w,
+                      right: 10.w,
+                      bottom: 15.w,
                     ),
                   ),
                 ),
@@ -324,9 +337,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => SignUpScreen2(
-                            firstName: _firstName.text,
-                            middleName: _middleName.text,
-                            lastName: _lastName.text,
+                            firstName: _firstName,
+                            middleName: _middleName,
+                            lastName: _lastName,
                           ),
                         ),
                       );
@@ -342,6 +355,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 60.h,
               )
             ],
           ),

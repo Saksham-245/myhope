@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -84,6 +83,7 @@ Future<Map<String, dynamic>> signUp(
     if (response.statusCode == 200) {
       return {"data": data, "statusCode": response.statusCode};
     } else {
+      print(data);
       return {"data": data, "statusCode": response.statusCode};
     }
   } on SocketException {

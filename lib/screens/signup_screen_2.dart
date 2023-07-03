@@ -5,6 +5,7 @@ import 'package:myhope/screens/home.dart';
 import 'package:myhope/screens/log_in.dart';
 
 import 'package:myhope/utils/utils.dart';
+import 'package:myhope/widgets/field_text.dart';
 
 List<String> _countryList = [
   'India',
@@ -39,11 +40,12 @@ class SignUpScreen2 extends StatefulWidget {
 
 class _SignUpScreen2State extends State<SignUpScreen2> {
   final _bio = TextEditingController();
-  final _email = TextEditingController();
-  final _password = TextEditingController();
-  final _dob = TextEditingController();
-  final _phoneNumber = TextEditingController();
-  final _hobbies = TextEditingController();
+  String dob = '';
+  String phoneNumber = '';
+  String hobbies = '';
+  String bio = '';
+  String email = '';
+  String password = '';
   late String _selectedCountry;
   late String _selectedGender;
   late String _selectOccupation;
@@ -64,30 +66,39 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
               SizedBox(
                 height: 40.h,
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LogIn(),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                    Text(
-                      'Back to Login',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontFamily: GoogleFonts.nunito().fontFamily,
-                        fontWeight: FontWeight.bold,
+              Padding(
+                padding: EdgeInsets.only(right: 220.w),
+                child: InkWell(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LogIn(),
                       ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.arrow_back,
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Text(
+                          'Back to Login',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontFamily: GoogleFonts.nunito().fontFamily,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
               Padding(
@@ -123,7 +134,11 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                     ),
                   ),
                   child: TextFormField(
-                    controller: _bio,
+                    onChanged: (value) {
+                      setState(() {
+                        bio = value.trim();
+                      });
+                    },
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(15.0),
                       border: OutlineInputBorder(
@@ -173,11 +188,21 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                             _selectOccupation = newValue!;
                           });
                         },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10),
+                        decoration: InputDecoration(
                           border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          contentPadding: EdgeInsets.only(
+                            top: 10.w,
+                            left: 10.w,
+                            right: 10.w,
+                            bottom: 15.w,
+                          ),
+                          errorStyle: TextStyle(
+                            color: Colors.red,
+                            fontSize: 12.sp,
+                            fontFamily: GoogleFonts.quicksand().fontFamily,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         items: _occupationList.map((String occupation) {
@@ -214,34 +239,25 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                 height: 5.h,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 20.w),
-                child: Container(
-                  width: 330.w,
-                  height: 50.h,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                          width: 0.50, color: Color(0xFF8B8B8B)),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value == '' || value!.isEmpty) {
-                        return 'Please enter email';
-                      }
-                      return null;
-                    },
-                    controller: _email,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(15.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
+                padding: EdgeInsets.only(
+                  left: 20.w,
+                  right: 20.w,
+                ),
+                child: FieldText(
+                  secureText: false,
+                  validator: (p0) {
+                    if (p0!.isEmpty) {
+                      return 'Please enter your email';
+                    } else if (!p0.contains('@')) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      email = value.trim();
+                    });
+                  },
                 ),
               ),
               SizedBox(
@@ -267,194 +283,146 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                 height: 5.h,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 20.w),
-                child: Container(
-                  width: 330.w,
-                  height: 50.h,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                          width: 0.50, color: Color(0xFF8B8B8B)),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                  child: TextFormField(
-                    validator: (value) {
-                      // ignore: unrelated_type_equality_checks
-                      if (value == '' ||
-                          value!.isEmpty ||
-                          value == 'password' ||
-                          value == '12345678') {
-                        if (value is String &&
-                            (value == 'password' ||
-                                value == '12345678' ||
-                                RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-                                    .hasMatch(value))) {
-                          return 'Please enter correct password';
-                        }
-                        return 'Please enter correct password';
-                      }
-                      return null;
-                    },
-                    controller: _password,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(15.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
+                padding: EdgeInsets.only(
+                  left: 20.w,
+                  right: 20.w,
+                ),
+                child: FieldText(
+                  validator: (p0) {
+                    if (p0!.isEmpty) {
+                      return 'Please enter your password';
+                    } else if (p0.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    } else if (p0 == 'password') {
+                      return 'Password cannot be password';
+                    }
+                    return null;
+                  },
+                  secureText: true,
+                  onChanged: (p0) {
+                    setState(() {
+                      password = p0.trim();
+                    });
+                  },
                 ),
               ),
               SizedBox(
                 height: 35.h,
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'DOB',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: const Color(0xFF535148),
-                          fontSize: 16.sp,
-                          fontFamily: GoogleFonts.quicksand().fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+              Padding(
+                padding: EdgeInsets.only(left: 25.w, right: 20.w),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'DOB',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: const Color(0xFF535148),
+                      fontSize: 16.sp,
+                      fontFamily: GoogleFonts.quicksand().fontFamily,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Container(
-                      width: 270.w,
-                      height: 50.h,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              width: 0.50, color: Color(0xFF8B8B8B)),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      child: TextFormField(
-                        controller: _dob,
-                        validator: (value) {
-                          if (value == '' || value!.isEmpty) {
-                            return 'Please enter DOB';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(15.0),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
               SizedBox(
-                height: 39.h,
+                height: 5.h,
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Phone Number',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: const Color(0xFF535148),
-                          fontSize: 16.sp,
-                          fontFamily: GoogleFonts.quicksand().fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Container(
-                      width: 200.w,
-                      height: 50.h,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              width: 0.50, color: Color(0xFF8B8B8B)),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      child: TextFormField(
-                        controller: _phoneNumber,
-                        keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(15.0),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 20.w,
+                  right: 20.w,
+                ),
+                child: FieldText(
+                    secureText: false,
+                    validator: (p0) {
+                      if (p0 == ' ' || p0!.isEmpty) {
+                        return 'Please enter your date of birth';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        dob = value.trim();
+                      });
+                    }),
               ),
               SizedBox(
-                height: 41.h,
+                height: 35.h,
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Hobbies',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: const Color(0xFF535148),
-                          fontSize: 16.sp,
-                          fontFamily: GoogleFonts.quicksand().fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+              Padding(
+                padding: EdgeInsets.only(left: 24.w, right: 20.w),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Phone Number',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: const Color(0xFF535148),
+                      fontSize: 16.sp,
+                      fontFamily: GoogleFonts.quicksand().fontFamily,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Container(
-                      width: 240.w,
-                      height: 50.h,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              width: 0.50, color: Color(0xFF8B8B8B)),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      child: TextFormField(
-                        controller: _hobbies,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(15.0),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
+                ),
+              ),
+              SizedBox(
+                height: 5.h,
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 22.w,
+                  right: 20.w,
+                ),
+                child: FieldText(
+                    secureText: false,
+                    validator: (p0) {
+                      if (p0 == ' ' || p0!.isEmpty) {
+                        return 'Please enter your phone number';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        phoneNumber = value.trim();
+                      });
+                    }),
+              ),
+              SizedBox(
+                height: 30.h,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 24.w, right: 20.w),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Hobbies',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: const Color(0xFF535148),
+                      fontSize: 16.sp,
+                      fontFamily: GoogleFonts.quicksand().fontFamily,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                ],
+                ),
+              ),
+              SizedBox(
+                height: 5.h,
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 22.w,
+                  right: 20.w,
+                ),
+                child: FieldText(
+                    secureText: false,
+                    validator: (p0) {},
+                    onChanged: (value) {
+                      setState(() {
+                        hobbies = value.trim();
+                      });
+                    }),
               ),
               SizedBox(
                 height: 28.h,
@@ -497,135 +465,133 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
               SizedBox(
                 height: 20.h,
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Country',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: const Color(0xFF535148),
-                          fontSize: 16.sp,
-                          fontFamily: GoogleFonts.quicksand().fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+              Padding(
+                padding: EdgeInsets.only(left: 24.w, right: 20.w),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Country',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: const Color(0xFF535148),
+                      fontSize: 16.sp,
+                      fontFamily: GoogleFonts.quicksand().fontFamily,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Container(
-                      width: 240.w,
-                      height: 50.h,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              width: 0.50, color: Color(0xFF8B8B8B)),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      child: DropdownButtonFormField(
-                        validator: (value) {
-                          if (value == '' || value!.isEmpty) {
-                            return 'Please select a value';
-                          }
-                          return null;
-                        },
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedCountry = newValue!;
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        items: _countryList.map((String country) {
-                          return DropdownMenuItem<String>(
-                            value: country,
-                            child: Text(country),
-                          );
-                        }).toList(),
-                      ),
+                ),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 22.w,
+                  right: 20.w,
+                ),
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    contentPadding: EdgeInsets.only(
+                      top: 10.w,
+                      left: 10.w,
+                      right: 10.w,
+                      bottom: 15.w,
+                    ),
+                    errorStyle: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12.sp,
+                      fontFamily: GoogleFonts.quicksand().fontFamily,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                ],
+                  items: _countryList.map((String country) {
+                    return DropdownMenuItem<String>(
+                      value: country,
+                      child: Text(country),
+                    );
+                  }).toList(),
+                  validator: (value) {
+                    if (value == '' || value!.isEmpty) {
+                      return 'Please select a value';
+                    }
+                    return null;
+                  },
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedCountry = newValue!;
+                    });
+                  },
+                ),
               ),
               SizedBox(
                 height: 20.h,
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Gender',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: const Color(0xFF535148),
-                          fontSize: 16.sp,
-                          fontFamily: GoogleFonts.quicksand().fontFamily,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+              Padding(
+                padding: EdgeInsets.only(left: 24.w, right: 20.w),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Gender',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: const Color(0xFF535148),
+                      fontSize: 16.sp,
+                      fontFamily: GoogleFonts.quicksand().fontFamily,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Container(
-                      width: 245.w,
-                      height: 50.h,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              width: 0.50, color: Color(0xFF8B8B8B)),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      child: DropdownButtonFormField(
-                        validator: (value) {
-                          if (value == '' || value!.isEmpty) {
-                            return 'Please select a value';
-                          }
-                          return null;
-                        },
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedGender = newValue!;
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 10,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        items: _genderList.map((String gender) {
-                          return DropdownMenuItem<String>(
-                            value: gender,
-                            child: Text(gender),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
               SizedBox(
-                height: 20.h,
+                height: 10.h,
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 22.w,
+                  right: 20.w,
+                ),
+                child: DropdownButtonFormField(
+                  validator: (value) {
+                    if (value == '' || value!.isEmpty) {
+                      return 'Please select a value';
+                    }
+                    return null;
+                  },
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedGender = newValue!;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    contentPadding: EdgeInsets.only(
+                      top: 10.w,
+                      left: 10.w,
+                      right: 10.w,
+                      bottom: 15.w,
+                    ),
+                    errorStyle: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12.sp,
+                      fontFamily: GoogleFonts.quicksand().fontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  items: _genderList.map((String gender) {
+                    return DropdownMenuItem<String>(
+                      value: gender,
+                      child: Text(gender),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(
+                height: 30.h,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -672,11 +638,11 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
                           widget.lastName,
                           _bio.text,
                           _selectOccupation,
-                          _email.text,
-                          _password.text,
-                          _dob.text,
-                          _phoneNumber.text,
-                          _hobbies.text,
+                          email,
+                          password,
+                          dob,
+                          hobbies,
+                          phoneNumber,
                           _photo.text,
                           _selectedCountry,
                           _selectedGender,
